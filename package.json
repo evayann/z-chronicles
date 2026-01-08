@@ -1,0 +1,37 @@
+{
+  "name": "avisxel",
+  "version": "0.0.1",
+  "description": "Starter Three.js.",
+  "author": "evayann",
+  "license": "ISC",
+  "homepage": "todo:)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "@dimforge/rapier3d": "^0.19.3",
+    "bitecs": "^0.4.0",
+    "camera-controls": "^3.1.2",
+    "simplex-noise": "^4.0.3"
+  },
+  "devDependencies": {
+    "@tweakpane/core": "^2.0.5",
+    "@tweakpane/plugin-essentials": "^0.2.1",
+    "@types/three": "^0.182.0",
+    "gh-pages": "^4.0.0",
+    "gsap": "^3.9.1",
+    "three": "^0.182.0",
+    "tweakpane": "^4.0.5",
+    "vite": "^2.9.13",
+    "vite-plugin-glsl": "^0.1.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
