@@ -1,4 +1,5 @@
 import { query } from "bitecs";
+import * as THREE from "three";
 import type { EngineContext } from "../../../engine/context";
 import type { FrameTime } from "../../../engine/time-controller";
 import { isPlayerJump, Player } from "../player.component";
@@ -29,11 +30,22 @@ export function playerGravitySystem(
       // direction: normal * (jumpVel * slopeJumpMult)
       const slopeBoost = jumpVel * 1; //CharacterMotor.slopeJumpMult[e];
 
-      const newVel = {
+      const jumpVelocityVec = {
         x: cv.x + nx * slopeBoost,
         y: jumpVel + ny * slopeBoost,
         z: cv.z + nz * slopeBoost,
       };
+
+      const slopJumpMult = 1;
+      const actualSlopeNormalVec = false as any;
+      // jumpDirection.set(0, jumpStrength * slopJumpMult, 0).projectOnVector(actualSlopeNormalVec)
+      // then + jumpVelocityVec
+      const slopeAssist = new THREE.Vector3(0, jumpVel * slopJumpMult, 0);
+      if (actualSlopeNormalVec && actualSlopeNormalVec.lengthSq() > 0) {
+        slopeAssist.projectOnVector(actualSlopeNormalVec);
+      }
+
+      const newVel = slopeAssist.add(jumpVelocityVec);
 
       body.setLinvel(newVel, true);
 
