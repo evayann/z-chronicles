@@ -1,10 +1,15 @@
 import { query } from "bitecs";
+import * as THREE from "three";
 import { TabPageApi } from "tweakpane";
 import { getQuaternion, getPosition } from "../../ecs/components";
 import { Player } from "../../ecs/player/player.component";
 import type { EngineContext } from "../../engine/context";
 
 export class PlayerGuiDebug {
+  #slopeRayMesh = new THREE.Line(
+    new THREE.BufferGeometry(),
+    new THREE.MeshBasicMaterial({ color: 0xff00ff })
+  );
   #playerId?: number;
   #playerInfo = {
     position: { x: 0, y: 0, z: 0 },
@@ -17,8 +22,9 @@ export class PlayerGuiDebug {
     transformFolder.addBinding(this.#playerInfo, "rotation");
   }
 
-  addPlayer({ world }: EngineContext) {
+  addPlayer({ world, three: { scene } }: EngineContext) {
     this.#playerId = query(world, [Player]).at(0);
+    scene.add(this.#slopeRayMesh);
   }
 
   update() {
@@ -33,5 +39,14 @@ export class PlayerGuiDebug {
     this.#playerInfo.rotation.x = qx;
     this.#playerInfo.rotation.y = qy;
     this.#playerInfo.rotation.z = qz;
+
+    // this.#slopeRayMesh.position.set(px, py - 0.35, pz);
+    this.#slopeRayMesh.geometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(
+        new Float32Array([px, py, pz, px, py - 3, pz]),
+        3
+      )
+    );
   }
 }

@@ -9,6 +9,8 @@ import { PhysicsGuidDebug } from "./physics.gui-debug";
 export class GUIDebug {
   #tabList!: TabApi;
 
+  #gameDebugRender = true;
+
   #performanceDebugger;
   #physicsDebugger;
   #playerDebugger;
@@ -26,6 +28,17 @@ export class GUIDebug {
       startStopButton.title = `${
         gameLoopService.isRunning ? "Stop" : "Start"
       } time`;
+    });
+
+    const showHideDebugButton = globalPane.addButton({
+      title: "Hide game debug",
+    });
+    showHideDebugButton.on("click", () => {
+      // Todo
+      const isDebugVisible = true;
+      showHideDebugButton.title = `${
+        isDebugVisible ? "Show" : "Hide"
+      } game debug`;
     });
 
     this.#tabList = globalPane.addTab({

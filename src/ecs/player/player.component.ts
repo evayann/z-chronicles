@@ -12,10 +12,10 @@ export const Player = {
 };
 
 export const initializePlayer = (id: number) => {
-  Player.maxVelocity[id] = 3;
+  Player.maxVelocity[id] = 5;
   Player.isSprinting[id] = false;
   Player.dragDamping[id] = 2;
-  Player.sprintMult[id] = 8;
+  Player.sprintMult[id] = 2;
   Player.accDeltaTime[id] = 1;
   Player.jumpPressed[id] = 0;
 };

@@ -21,8 +21,8 @@ export class PhysicsGuidDebug {
     this.#mesh.frustumCulled = false;
   }
 
-  initialize(context: EngineContext): void {
-    context.three.scene.add(this.#mesh);
+  initialize({ three: { scene } }: EngineContext): void {
+    scene.add(this.#mesh);
   }
 
   update(world: RapierWorld) {

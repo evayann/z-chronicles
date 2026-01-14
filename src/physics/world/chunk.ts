@@ -1,5 +1,4 @@
 import type * as THREE from "three";
-import { RAPIER } from "../rapier-world";
 import type { RapierWorld } from "../rapier-world";
 import { CHUNK_SIZE } from "../../world/constants";
 import type R from "@dimforge/rapier3d-compat";
@@ -14,8 +13,11 @@ function key(cx: number, cz: number): ChunkKey {
 export class ChunkPhysics {
   private chunkBodies = new Map<ChunkKey, R.RigidBody>();
   private chunkColliders = new Map<ChunkKey, R.Collider>();
+  #RAPIER;
 
-  constructor(private physics: RapierWorld) {}
+  constructor(private physics: RapierWorld) {
+    this.#RAPIER = physics.R;
+  }
 
   /** Crée ou remplace le collider d’un chunk à partir de sa géométrie (locale chunk). */
   upsertChunkCollider(cx: number, cz: number, geometry: THREE.BufferGeometry) {
@@ -45,13 +47,14 @@ export class ChunkPhysics {
     const baseZ = cz * CHUNK_SIZE;
 
     const body = this.physics.createRigidBody(
-      RAPIER.RigidBodyDesc.fixed().setTranslation(baseX, 0, baseZ)
+      this.#RAPIER.RigidBodyDesc.fixed().setTranslation(baseX, 0, baseZ)
     );
 
     // Collider trimesh local au body
-    const colDesc = RAPIER.ColliderDesc.trimesh(vertices, indices).setFriction(
-      0.9
-    );
+    const colDesc = this.#RAPIER.ColliderDesc.trimesh(
+      vertices,
+      indices
+    ).setFriction(0.9);
 
     const collider = this.physics.createCollider(colDesc, body);
 
