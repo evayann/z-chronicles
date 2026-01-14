@@ -9,9 +9,9 @@ export function createWorld({
   // Voxels + rendu
   generateHeightmapWorld(voxels, {
     baseHeight: 12,
-    amplitude: 18,
-    frequency: 0.02,
-    octaves: 4,
+    amplitude: 28,
+    frequency: 0.0225,
+    octaves: 8,
     persistence: 0.5,
     lacunarity: 2.0,
   });

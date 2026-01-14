@@ -3,8 +3,7 @@ import * as THREE from "three";
 import type { EngineContext } from "../../../engine/context";
 import type { FrameTime } from "../../../engine/time-controller";
 import { isPlayerJump, Player } from "../player.component";
-import { RigidBody, Transform } from "../../components";
-import type RAPIER from "@dimforge/rapier3d-compat";
+import { RigidBody } from "../../components";
 import { Character } from "../../components/character";
 import { KinematicCharacterController } from "@dimforge/rapier3d-compat";
 
@@ -17,14 +16,12 @@ export function kinematicControllerSystem(
   { world, physics, three }: EngineContext,
   time: FrameTime
 ) {
-  const controller = (window as any).test
-    .controller as KinematicCharacterController;
   if (time.paused) return;
 
   const dt = time.delta; // adapte selon ton FrameTime
-  const yaw = three.controls.azimuthAngle;
 
   for (const e of query(world, [RigidBody, Player])) {
+    const controller = Player.controller[e];
     const body = physics.getEntityBody(e);
     const collider = physics.getEntityCollider(e); // <-- à fournir dans ton wrapper
     if (!body || !collider) continue;
@@ -78,14 +75,14 @@ export function kinematicControllerSystem(
     // 4) Grounded + Jump
     const grounded = controller.computedGrounded() ?? false;
     if (grounded) {
-      Character.isOnGround[e] = 0;
+      Character.isOnGround[e] = true;
       //   Reset vitesse verticale quand on touche le sol
       if (Character.velocityY[e] < 0) Character.velocityY[e] = 0;
       if (isPlayerJump(e)) {
         Character.velocityY[e] = 6; // jump speed
       }
     } else {
-      Character.isOnGround[e] = 1;
+      Character.isOnGround[e] = false;
     }
   }
 }

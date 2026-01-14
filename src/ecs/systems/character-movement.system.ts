@@ -1,7 +1,7 @@
 import { query } from "bitecs";
 import type { EngineContext } from "../../engine/context";
 import type { FrameTime } from "../../engine/time-controller";
-import { Character, isCharacterOnGround } from "../components/character";
+import { Character } from "../components/character";
 import * as THREE from "three";
 
 const input = new THREE.Vector3();
@@ -26,7 +26,7 @@ export function characterMovementSystem(
     const hasMovementInput = input.lengthSq() > 1e-6;
     if (!hasMovementInput) {
       input.set(0, 0, 0);
-      if (!isCharacterOnGround(e)) {
+      if (!Character.isOnGround[e]) {
         Character.velocityX[e] *= 0.99;
         Character.velocityZ[e] *= 0.99;
         continue;

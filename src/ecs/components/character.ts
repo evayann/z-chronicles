@@ -1,7 +1,7 @@
 import { MAX_ENTITIES } from "../entities";
 
 export const Character = {
-  isOnGround: new Float32Array(MAX_ENTITIES),
+  isOnGround: [] as boolean[],
 
   directionX: new Float32Array(MAX_ENTITIES),
   directionY: new Float32Array(MAX_ENTITIES),
@@ -14,15 +14,12 @@ export const Character = {
 
 export const initializeCharacter = (id: number) => {
   setCharacterMovement(id, { x: 0, y: 0, z: 0 });
-  Character.isOnGround[id] = 0;
+  Character.isOnGround[id] = true;
   Character.velocityX[id] =
     Character.velocityY[id] =
     Character.velocityZ[id] =
       0;
 };
-
-export const isCharacterOnGround = (id: number) =>
-  Character.isOnGround[id] == 0;
 
 export const resetCharacter = initializeCharacter;
 
