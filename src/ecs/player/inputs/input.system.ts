@@ -1,10 +1,7 @@
 import { query } from "bitecs";
 import type { EngineContext } from "../../../engine/context";
 import type { FrameTime } from "../../../engine/time-controller";
-import {
-  CharacterMovement,
-  resetCharacterMovement,
-} from "../../components/character";
+import { Character, resetCharacter } from "../../components/character";
 import { Player } from "../player.component";
 
 function clamp(v: number, a: number, b: number) {
@@ -15,9 +12,9 @@ export function playerInputSystem(
   { world, input }: EngineContext,
   time: FrameTime
 ) {
-  const playerManageByMovementList = query(world, [Player, CharacterMovement]);
+  const playerManageByMovementList = query(world, [Player, Character]);
   if (time.paused) {
-    for (const e of playerManageByMovementList) resetCharacterMovement(e);
+    for (const e of playerManageByMovementList) resetCharacter(e);
     return;
   }
 
@@ -34,9 +31,9 @@ export function playerInputSystem(
     const ny = len > 1e-6 ? rawY / Math.min(len, 1) : 0;
 
     // on écrit dans le component pour toutes les entités contrôlées
-    CharacterMovement.x[e] = nx; // droite +
-    CharacterMovement.y[e] = 0; // vertical géré ailleurs
-    CharacterMovement.z[e] = ny; // avant +
+    Character.directionX[e] = nx; // droite +
+    Character.directionY[e] = 0; // vertical géré ailleurs
+    Character.directionZ[e] = ny; // avant +
 
     Player.jumpPressed[e] = +state.isJumpPressed;
     Player.isSprinting[e] = state.isSprinting;

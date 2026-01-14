@@ -45,13 +45,20 @@ export class RapierWorld {
     return this.bodies[handle];
   }
 
-  createEntityCollider(desc: ColliderDesc, body?: RigidBody) {
+  createEntityCollider(
+    desc: ColliderDesc,
+    body?: RigidBody & { jsHandle: number }
+  ) {
     const col = body
       ? this.world.createCollider(desc, body)
       : this.world.createCollider(desc);
 
-    this.colliders[col.handle] = col;
+    this.colliders[body?.jsHandle ?? col.handle] = col;
     return col;
+  }
+
+  getEntityCollider(handle: number): Collider {
+    return this.colliders[handle];
   }
 
   createRigidBody(desc: RigidBodyDesc): RigidBody {

@@ -3,7 +3,7 @@ import type { EngineContext } from "../../../engine/context";
 import type { FrameTime } from "../../../engine/time-controller";
 import { MathUtils } from "three";
 import { Player } from "../player.component";
-import { CharacterMovement } from "../../components/character";
+import { Character } from "../../components/character";
 
 function wrapPi(a: number) {
   a = (a + Math.PI) % (Math.PI * 2);
@@ -39,8 +39,8 @@ export function playerFacingSystem(
   const camYaw = three.controls.azimuthAngle;
 
   for (const e of query(world, [Player])) {
-    let mx = CharacterMovement.x[e];
-    let mz = CharacterMovement.z[e];
+    let mx = Character.directionX[e];
+    let mz = Character.directionZ[e];
 
     const body = physics.getEntityBody(e);
     if (!body) continue;
@@ -61,6 +61,7 @@ export function playerFacingSystem(
     // CharacterFacing.yaw[e] = nextYaw;
 
     // Apply rotation to Rapier body
-    body.setRotation(quatFromYaw(nextYaw), true);
+    body.setNextKinematicRotation(quatFromYaw(nextYaw));
+    // body.setRotation(quatFromYaw(nextYaw), true);
   }
 }

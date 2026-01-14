@@ -5,10 +5,7 @@ import { Render3D, RigidBody, Transform } from "../components";
 import type { EngineContext } from "../../engine/context";
 import { initializePlayer, Player, PlayerController } from "./player.component";
 import { Animator } from "../components/animator";
-import {
-  CharacterMovement,
-  initializeCharacterMovement,
-} from "../components/character";
+import { Character, initializeCharacter } from "../components/character";
 import { findSurfaceY } from "../../world/query";
 
 export function createPlayerPrefab(context: EngineContext) {
@@ -20,7 +17,7 @@ export function createPlayerPrefab(context: EngineContext) {
   addComponent(world, e, Render3D);
   addComponent(world, e, RigidBody);
   addComponent(world, e, Player);
-  addComponent(world, e, CharacterMovement);
+  addComponent(world, e, Character);
   addComponent(world, e, PlayerController);
   addComponent(world, e, Animator);
 
@@ -33,7 +30,7 @@ export function createPlayerPrefab(context: EngineContext) {
   Transform.z[e] = spawnZ;
   Transform.sx[e] = Transform.sy[e] = Transform.sz[e] = 1;
   initializePlayer(e);
-  initializeCharacterMovement(e);
+  initializeCharacter(e);
 
   const asset = assets.getGLB("models/player.glb");
 
@@ -57,11 +54,28 @@ export function createPlayerPrefab(context: EngineContext) {
   }
 
   const RAPIER = physics.R;
+
+  const offset = 0.01;
+  const controller = physics.world.createCharacterController(offset);
+
+  // Options utiles
+  controller.setSlideEnabled(true);
+  controller.enableSnapToGround(0.2);
+  controller.enableAutostep(0.35, 0.2, true);
+  controller.setMaxSlopeClimbAngle(1.0);
+  controller.setMinSlopeSlideAngle(1.2);
+
+  (window as any).test = { controller };
+
   const body = physics.createEntityRigidBody(
-    RAPIER.RigidBodyDesc.dynamic().setTranslation(spawnX, spawnY, spawnZ)
+    RAPIER.RigidBodyDesc.kinematicPositionBased().setTranslation(
+      spawnX,
+      spawnY,
+      spawnZ
+    )
   );
 
-  body.lockRotations(true, true);
+  // body.lockRotations(true, true);
 
   physics.createEntityCollider(
     RAPIER.ColliderDesc.capsule(0.6, 0.3)

@@ -1,6 +1,8 @@
-import { playerMovementSystem } from "./ecs/player";
-import { playerSystemList } from "./ecs/player/player.system";
+import { playerInputSystem } from "./ecs/player/inputs/input.system";
+import { playerFacingSystem } from "./ecs/player/systems/facing.system";
+import { kinematicControllerSystem } from "./ecs/player/systems/kinematic.system";
 import { animationSystem } from "./ecs/systems/animation.system";
+import { characterMovementSystem } from "./ecs/systems/character-movement.system";
 import { physicsSystem } from "./ecs/systems/physics.system";
 import { renderSystem } from "./ecs/systems/render.system";
 import { cameraFollowSystem } from "./ecs/systems/third-person-camera.system";
@@ -38,8 +40,11 @@ async function bootstrap() {
     look.enable();
 
     startLoop(context, [
-        ...playerSystemList,
+        playerInputSystem,
+        characterMovementSystem,
+        kinematicControllerSystem,
         physicsSystem,
+        playerFacingSystem,
         animationSystem,
         renderSystem,
         cameraFollowSystem

@@ -15,12 +15,12 @@ export function physicsSystem(
     const body = physics.getEntityBody(RigidBody.handle[e]);
     if (!body) continue;
 
-    const t = body.translation();
+    const t = body.isKinematic() ? body.nextTranslation() : body.translation();
     Transform.x[e] = t.x;
     Transform.y[e] = t.y;
     Transform.z[e] = t.z;
 
-    const r = body.rotation();
+    const r = body.isKinematic() ? body.nextRotation() : body.rotation();
     Transform.rw[e] = r.w;
     Transform.rx[e] = r.x;
     Transform.ry[e] = r.y;

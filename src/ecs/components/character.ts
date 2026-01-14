@@ -1,21 +1,36 @@
 import { MAX_ENTITIES } from "../entities";
 
-export const CharacterMovement = {
-  x: new Float32Array(MAX_ENTITIES),
-  y: new Float32Array(MAX_ENTITIES),
-  z: new Float32Array(MAX_ENTITIES),
+export const Character = {
+  isOnGround: new Float32Array(MAX_ENTITIES),
+
+  directionX: new Float32Array(MAX_ENTITIES),
+  directionY: new Float32Array(MAX_ENTITIES),
+  directionZ: new Float32Array(MAX_ENTITIES),
+
+  velocityX: new Float32Array(MAX_ENTITIES),
+  velocityY: new Float32Array(MAX_ENTITIES),
+  velocityZ: new Float32Array(MAX_ENTITIES),
 };
 
-export const initializeCharacterMovement = (id: number) =>
+export const initializeCharacter = (id: number) => {
   setCharacterMovement(id, { x: 0, y: 0, z: 0 });
+  Character.isOnGround[id] = 0;
+  Character.velocityX[id] =
+    Character.velocityY[id] =
+    Character.velocityZ[id] =
+      0;
+};
 
-export const resetCharacterMovement = initializeCharacterMovement;
+export const isCharacterOnGround = (id: number) =>
+  Character.isOnGround[id] == 0;
+
+export const resetCharacter = initializeCharacter;
 
 export const setCharacterMovement = (
   id: number,
   { x, y, z }: { x: number; y: number; z: number }
 ) => {
-  CharacterMovement.x[id] = x;
-  CharacterMovement.y[id] = y;
-  CharacterMovement.z[id] = z;
+  Character.directionX[id] = x;
+  Character.directionY[id] = y;
+  Character.directionZ[id] = z;
 };

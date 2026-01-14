@@ -3,6 +3,7 @@ import { MAX_ENTITIES } from "../entities";
 export const PlayerCamera = {};
 
 export const Player = {
+  vy: new Float32Array(MAX_ENTITIES),
   maxVelocity: new Float32Array(MAX_ENTITIES),
   dragDamping: new Float32Array(MAX_ENTITIES),
   isSprinting: [] as boolean[],
@@ -20,6 +21,7 @@ export const initializePlayer = (id: number) => {
   Player.jumpPressed[id] = 0;
 };
 
+// Todo remove
 export const isPlayerJump = (id: number) => Player.jumpPressed[id] === 1;
 
 export const PlayerController = {};
